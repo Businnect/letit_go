@@ -39,7 +39,7 @@ func (c *Client) Do(req *http.Request) (io.ReadCloser, error) {
 		req.URL, _ = req.URL.Parse(c.baseURL + req.URL.Path)
 	}
 
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.apiKey))
+	req.Header.Set("USER-API-TOKEN", c.apiKey)
 	req.Header.Set("User-Agent", "LetIt-Go-SDK/1.0")
 
 	resp, err := c.httpClient.Do(req)
