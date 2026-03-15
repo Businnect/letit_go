@@ -1,6 +1,7 @@
 package letit
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -48,7 +49,15 @@ func (c *Client) Do(req *http.Request) (io.ReadCloser, error) {
 	}
 
 	if resp.StatusCode >= 400 {
-		resp.Body.Close() 
+		resp.Body.Close()
+
+		var errorResp struct {
+			InvalidToken string `json:"invalid_api_user_token"`
+		}
+
+		if err := json.NewDecoder(resp.Body).Decode(&errorResp); err == nil && errorResp.InvalidToken != "" {
+			return nil, fmt.Errorf("api error (401): %s", errorResp.InvalidToken)
+		}
 
 		return nil, fmt.Errorf("api error: status %d", resp.StatusCode)
 	}
