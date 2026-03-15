@@ -18,7 +18,7 @@ func TestCreateUserJobWithCompany_Integration(t *testing.T) {
 
 	client := letit.NewClient(token, "https://api.letit.com")
 
-	logoPath := "../.git/logo.png"
+	logoPath := "../.github/logo.png"
 	file, err := os.Open(logoPath)
 	if err != nil {
 		t.Fatalf("Failed to open test logo at %s: %v", logoPath, err)
