@@ -57,3 +57,8 @@ const (
 type UserJobCreatedByUserResponse struct {
 	Slug string `json:"slug"`
 }
+
+type DeleteUserJobRequest struct {
+    Slug     string `json:"slug"`
+    Username string `json:"username"`
+}

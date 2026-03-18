@@ -119,3 +119,25 @@ func (r *JobResource) CreateWithCompany(ctx context.Context, req CreateUserJobRe
 
 	return &result, nil
 }
+
+func (r *JobResource) Delete(ctx context.Context, req schemas.DeleteUserJobRequest) error {
+	bodyBytes, err := json.Marshal(req)
+	if err != nil {
+		return err
+	}
+
+	httpRequest, err := http.NewRequestWithContext(ctx, http.MethodDelete, "/api/v1/client/job", bytes.NewReader(bodyBytes))
+	if err != nil {
+		return err
+	}
+
+	httpRequest.Header.Set("Content-Type", "application/json")
+
+	respBody, err := r.client.Do(httpRequest)
+	if err != nil {
+		return err
+	}
+	defer respBody.Close()
+	
+	return nil
+}

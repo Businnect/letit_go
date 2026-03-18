@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"mime/multipart"
 	"net/http"
@@ -99,7 +100,7 @@ func (r *MicropostResource) Create(ctx context.Context, params CreateMicropostRe
 	if err != nil {
 		return nil, err
 	}
-	
+
 	defer resBody.Close()
 
 	var result schemas.CreatedWithPublicIdAndLinkResponse
@@ -108,4 +109,21 @@ func (r *MicropostResource) Create(ctx context.Context, params CreateMicropostRe
 	}
 
 	return &result, nil
+}
+
+func (r *MicropostResource) Delete(ctx context.Context, publicID string) error {
+	u := fmt.Sprintf("/api/v1/client/micropost?public_id=%s", publicID)
+
+	httpRequest, err := http.NewRequestWithContext(ctx, http.MethodDelete, u, nil)
+	if err != nil {
+		return err
+	}
+
+	respBody, err := r.client.Do(httpRequest)
+	if err != nil {
+		return err
+	}
+	defer respBody.Close()
+
+	return nil
 }

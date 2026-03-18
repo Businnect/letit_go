@@ -2,6 +2,11 @@
 
 A professional Go client for the LetIt API, featuring high-performance support for **Microposts** and **Job** management.
 
+## 📖 API Documentation
+
+For detailed information on the underlying REST API, endpoints, and authentication schemas, please visit the official documentation:
+* **API Reference**: [http://api.letit.com](https://api.letit.com/docs/client/)
+
 ## Features
 
 * **Job Management**: Full support for creating job postings with company logos, descriptions, and metadata.
