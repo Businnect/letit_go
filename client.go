@@ -50,7 +50,7 @@ func (c *Client) Do(req *http.Request) (io.ReadCloser, error) {
 
 	if resp.StatusCode >= 400 {
 		defer resp.Body.Close()
-		
+
 		var errorResp struct {
 			Detail string `json:"detail"`
 		}

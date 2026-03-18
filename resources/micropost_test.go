@@ -38,7 +38,7 @@ func TestClientCreateMicropost_Integration(t *testing.T) {
 	t.Cleanup(func() {
 		err := client.Micropost.Delete(ctx, response.PublicID)
 		if err != nil {
-			t.Logf("Warning: Failed to cleanup micropost %s: %v", response.PublicID, err)
+			t.Fatalf("Warning: Failed to cleanup micropost %s: %v", response.PublicID, err)
 		} else {
 			t.Logf("Successfully cleaned up micropost: %s", response.PublicID)
 		}
