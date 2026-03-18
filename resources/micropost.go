@@ -92,12 +92,14 @@ func (r *MicropostResource) Create(ctx context.Context, params CreateMicropostRe
 	if err != nil {
 		return nil, err
 	}
+
 	req.Header.Set("Content-Type", w.FormDataContentType())
 
 	resBody, err := r.client.Do(req)
 	if err != nil {
 		return nil, err
 	}
+	
 	defer resBody.Close()
 
 	var result schemas.CreatedWithPublicIdAndLinkResponse

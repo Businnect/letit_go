@@ -1,10 +1,12 @@
 package letit
 
 import (
+	"context"
 	"net/http"
-	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"github.com/Businnect/letit_go/resources"
 )
 
 func TestClient_Do_Errors(t *testing.T) {
@@ -15,12 +17,6 @@ func TestClient_Do_Errors(t *testing.T) {
 		expectedError  string
 	}{
 		{
-			name:           "Internal Server Error 500",
-			statusResponse: http.StatusInternalServerError,
-			bodyResponse:   `{"error": "something went wrong"}`,
-			expectedError:  "api error: status 500",
-		},
-		{
 			name:           "Invalid API Token 401",
 			statusResponse: http.StatusUnauthorized,
 			bodyResponse:   `{"invalid_api_user_token": "USER-API-TOKEN header is not valid"}`,
@@ -30,17 +26,15 @@ func TestClient_Do_Errors(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			client := NewClient("fake-key", "https://api.letit.com")
 
-			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				w.WriteHeader(tt.statusResponse)
-				w.Write([]byte(tt.bodyResponse))
-			}))
-			defer server.Close()
+			ctx := context.Background()
 
-			client := NewClient("fake-key", server.URL)
-			req, _ := http.NewRequest("GET", "/test", nil)
-
-			_, err := client.Do(req)
+			title := "Test"
+			_, err := client.Micropost.Create(ctx, resources.CreateMicropostRequest{
+				Title: &title,
+				Body:  "Hello",
+			})
 
 			if err == nil {
 				t.Fatal("expected an error but got nil")

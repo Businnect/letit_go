@@ -28,7 +28,6 @@ func TestClientCreateMicropost_Integration(t *testing.T) {
 	response, err := client.Micropost.Create(ctx, req)
 
 	if err != nil {
-
 		t.Fatalf("Integration test failed: %v", err)
 	}
 
