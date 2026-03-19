@@ -50,6 +50,15 @@ func TestCreateUserJobWithCompany_Integration(t *testing.T) {
 	if response.Slug == "" {
 		t.Error("Expected a non-empty slug in the response")
 	}
+
+	t.Cleanup(func() {
+		err := client.Job.Delete(ctx, response.Slug)
+		if err != nil {
+			t.Fatalf("Warning: Failed to cleanup job %s: %v", response.Slug, err)
+		} else {
+			t.Logf("Successfully cleaned up job: %s", response.Slug)
+		}
+	})
 }
 
 func ptr(s string) *string {

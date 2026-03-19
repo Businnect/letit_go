@@ -120,13 +120,17 @@ func (r *JobResource) CreateWithCompany(ctx context.Context, req CreateUserJobRe
 	return &result, nil
 }
 
-func (r *JobResource) Delete(ctx context.Context, req schemas.DeleteUserJobRequest) error {
-	bodyBytes, err := json.Marshal(req)
+func (r *JobResource) Delete(ctx context.Context, slug string) error {
+	data := map[string]string{
+		"slug": slug,
+	}
+
+	jsonData, err := json.Marshal(data)
 	if err != nil {
 		return err
 	}
 
-	httpRequest, err := http.NewRequestWithContext(ctx, http.MethodDelete, "/api/v1/client/job", bytes.NewReader(bodyBytes))
+	httpRequest, err := http.NewRequestWithContext(ctx, http.MethodDelete, "/api/v1/client/job", bytes.NewBuffer(jsonData))
 	if err != nil {
 		return err
 	}
@@ -138,6 +142,6 @@ func (r *JobResource) Delete(ctx context.Context, req schemas.DeleteUserJobReque
 		return err
 	}
 	defer respBody.Close()
-	
+
 	return nil
 }

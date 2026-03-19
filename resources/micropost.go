@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"mime/multipart"
 	"net/http"
@@ -112,18 +111,27 @@ func (r *MicropostResource) Create(ctx context.Context, params CreateMicropostRe
 }
 
 func (r *MicropostResource) Delete(ctx context.Context, publicID string) error {
-	u := fmt.Sprintf("/api/v1/client/micropost?public_id=%s", publicID)
+	data := map[string]string{
+		"public_id": publicID,
+	}
 
-	httpRequest, err := http.NewRequestWithContext(ctx, http.MethodDelete, u, nil)
+	jsonData, err := json.Marshal(data)
 	if err != nil {
 		return err
 	}
+
+	httpRequest, err := http.NewRequestWithContext(ctx, http.MethodDelete, "/api/v1/client/micropost", bytes.NewBuffer(jsonData))
+	if err != nil {
+		return err
+	}
+
+	httpRequest.Header.Set("Content-Type", "application/json")
 
 	respBody, err := r.client.Do(httpRequest)
 	if err != nil {
 		return err
 	}
-	defer respBody.Close()
 
+	defer respBody.Close()
 	return nil
 }
