@@ -18,6 +18,7 @@ type Client struct {
 
 	Micropost *resources.MicropostResource
 	Job       *resources.JobResource
+	AdminBlog *resources.AdminBlogResource
 }
 
 func NewClient(apiKey string, baseURL string) *Client {
@@ -31,6 +32,7 @@ func NewClient(apiKey string, baseURL string) *Client {
 
 	c.Micropost = resources.NewMicropostResource(c)
 	c.Job = resources.NewJobResource(c)
+	c.AdminBlog = resources.NewAdminBlogResource(c)
 
 	return c
 }

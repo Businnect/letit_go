@@ -135,3 +135,34 @@ func (r *MicropostResource) Delete(ctx context.Context, publicID string) error {
 	defer respBody.Close()
 	return nil
 }
+
+func (r *MicropostResource) Vote(ctx context.Context, publicID string) (*schemas.UserMicropostVoteResponse, error) {
+	data := map[string]string{
+		"public_id": publicID,
+	}
+
+	jsonData, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+
+	httpRequest, err := http.NewRequestWithContext(ctx, http.MethodPatch, "/api/v1/client/micropost/vote", bytes.NewBuffer(jsonData))
+	if err != nil {
+		return nil, err
+	}
+
+	httpRequest.Header.Set("Content-Type", "application/json")
+
+	respBody, err := r.client.Do(httpRequest)
+	if err != nil {
+		return nil, err
+	}
+	defer respBody.Close()
+
+	var response schemas.UserMicropostVoteResponse
+	if err := json.NewDecoder(respBody).Decode(&response); err != nil {
+		return nil, err
+	}
+
+	return &response, nil
+}

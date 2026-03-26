@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/Businnect/letit_go"
+	letit "github.com/Businnect/letit_go"
 	"github.com/Businnect/letit_go/resources"
 )
 
@@ -36,6 +36,11 @@ func TestClientCreateMicropost_Integration(t *testing.T) {
 	}
 
 	t.Cleanup(func() {
+		_, voteErr := client.Micropost.Vote(ctx, response.PublicID)
+		if voteErr != nil {
+			t.Fatalf("Warning: Failed to vote micropost %s before cleanup: %v", response.PublicID, voteErr)
+		}
+
 		err := client.Micropost.Delete(ctx, response.PublicID)
 		if err != nil {
 			t.Fatalf("Warning: Failed to cleanup micropost %s: %v", response.PublicID, err)
