@@ -109,3 +109,13 @@ $env:LETIT_API_TOKEN="your-token"; go test -v ./...
 LETIT_API_TOKEN="your-token" go test -v ./...
 
 ```
+
+## How to publish a new version
+
+Refert to this for the next published version https://github.com/Businnect/letit_go/tags
+
+```bash
+$git pull
+$git tag v0.0.1
+$git push origin v0.0.1
+```
