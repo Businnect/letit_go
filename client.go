@@ -39,7 +39,11 @@ func NewClient(apiKey string, baseURL string) *Client {
 
 func (c *Client) Do(req *http.Request) (io.ReadCloser, error) {
 	if !strings.HasPrefix(req.URL.String(), "http") {
-		req.URL, _ = req.URL.Parse(c.baseURL + req.URL.Path)
+		pathWithQuery := req.URL.Path
+		if req.URL.RawQuery != "" {
+			pathWithQuery += "?" + req.URL.RawQuery
+		}
+		req.URL, _ = req.URL.Parse(c.baseURL + pathWithQuery)
 	}
 
 	req.Header.Set("USER-API-TOKEN", c.apiKey)
